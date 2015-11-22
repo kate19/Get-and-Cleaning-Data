@@ -13,6 +13,7 @@ files<-list.files(path_rf, recursive=TRUE)
 files
 
 2. I put the data into the variables (Activity-Subject-Features)
+
 ActTest  <- read.table(file.path(path_rf, "test" , "Y_test.txt" ),header = FALSE)
 ActTrain <- read.table(file.path(path_rf, "train", "Y_train.txt"),header = FALSE)
 SubTrain <- read.table(file.path(path_rf, "train", "subject_train.txt"),header = FALSE)
@@ -21,21 +22,25 @@ FeatTest  <- read.table(file.path(path_rf, "test" , "X_test.txt" ),header = FALS
 FeatTrain <- read.table(file.path(path_rf, "train", "X_train.txt"),header = FALSE)
 
 3. I merge the datasets
+
 dataSub <- rbind(SubTrain, SubTest)
 dataAct<- rbind(ActTrain, ActTest)
 dataFeat<- rbind(FeatTrain, FeatTest)
 
 4. I chage the names
+
 names(dataSub)<-c("subject")
 names(dataAct)<- c("activity")
 FeatNames <- read.table(file.path(path_rf, "features.txt"),head=FALSE)
 names(dataFeat)<- FeatNames$V2
 
 5. I create a data frame
+
 dataComb <- cbind(dataSub, dataAct)
 Data <- cbind(dataFeat, dataComb)
 
 6. Selecting only Mean and St.Dev
+
 subFeatNames<-FeatNames$V2[grep("mean\\(\\)|std\\(\\)", FeatNames$V2)]
 selectNames<-c(as.character(subFeatNames), "subject", "activity" )
 Data<-subset(Data,select=selectNames)
@@ -48,6 +53,7 @@ actLabels <- read.table(file.path(path_rf, "activity_labels.txt"),header = FALSE
 head(Data$activity,30)
 
 8. I give more descreptive names
+
 names(Data)<-gsub("^t", "time", names(Data))
 names(Data)<-gsub("^f", "frequency", names(Data))
 names(Data)<-gsub("Acc", "Accelerometer", names(Data))
